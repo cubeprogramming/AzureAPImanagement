@@ -1,0 +1,22 @@
+﻿{
+  "queryParameters": [
+    {
+      "name": "speakername",
+      "type": "string",
+      "values": []
+    },
+    {
+      "name": "dayno",
+      "description": "Format - int32.",
+      "type": "integer",
+      "values": []
+    },
+    {
+      "name": "keyword",
+      "type": "string",
+      "values": []
+    }
+  ],
+  "headers": [],
+  "representations": []
+}

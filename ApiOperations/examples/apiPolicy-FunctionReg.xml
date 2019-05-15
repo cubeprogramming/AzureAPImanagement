@@ -1,0 +1,20 @@
+﻿<!--This API policy contain backend serverless Function registration
+    backend-id='FunctionName' should not be changed as it is used to register 
+    serverless functions. 'FunctionName' is atuomaticaly replaced in template.
+-->
+
+<policies>
+  <inbound>
+    <base />
+    <set-backend-service id='apim-generated-policy' backend-id='FunctionName' />
+  </inbound>
+  <backend>
+    <base />
+  </backend>
+  <outbound>
+    <base />
+  </outbound>
+  <on-error>
+    <base />
+  </on-error>
+</policies>

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apiServiceName": {
+      "value": "apiServiceName-dev"
+    },
+    "apiName": {
+      "value": "demo-conference-api"
+    },
+    "operationName": {
+      "value": "GetSession"
+    },
+    "operationDisplayName": {
+      "value": "GetSession"
+    },
+    "operationDescription": {
+      "value": "Retreive a representation of a single session by Id"
+    },
+    "httpMethod": {
+      "value": "GET"
+    },
+    "urlSufix": {
+      "value": "/session/{id}"
+    },
+    "policyFile": {
+      "value": "<policies><inbound><base /></inbound><backend><base /></backend><outbound><base /></outbound><on-error><base /></on-error></policies>"
+    }
+  }
+}

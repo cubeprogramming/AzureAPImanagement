@@ -1,0 +1,67 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apiServiceName": {
+      "type": "string",
+      "minLength": 10,
+      "metadata": {
+        "description": "The name of API service to associate this APIs with"
+      }
+    },
+    "apiName": {
+      "type": "string",
+      "minLength": 3,
+      "metadata": {
+        "description": "API name"
+      }
+    },
+    "apiDisplayName": {
+      "type": "string",
+      "defaultValue": "[parameters('apiName')]",
+      "minLength": 3,
+      "metadata": {
+        "description": "User frendly API display name"
+      }
+    },
+    "apiDescription": {
+      "type": "string",
+      "defaultValue": "Individual API containing operations",
+      "minLength": 10,
+      "metadata": {
+        "description": "API description"
+      }
+    },
+    "serviceUrl": {
+      "type": "string",
+      "defaultValue": null,
+      "metadata": {
+        "description": "URL of the backend service"
+      }
+    }
+    
+  },
+  "variables": {},
+  "resources": [
+    {
+      "comments": "This resource represent one individual API with operations",
+      "type": "Microsoft.ApiManagement/service/apis",
+      "name": "[concat(parameters('apiServiceName'), '/', parameters('apiName'))]",
+      "apiVersion": "2018-06-01-preview",
+      "scale": null,
+      "properties": {
+        "displayName": "[parameters('apiDisplayName')]",
+        "apiRevision": "1",
+        "description": "[parameters('apiDescription')]",
+        "serviceUrl": "[parameters('serviceUrl')]",
+        "path": "[parameters('apiName')]",
+        "protocols": [
+          "https"
+        ],
+        "authenticationSettings": null,
+        "subscriptionKeyParameterNames": null
+      },
+      "dependsOn": []
+    }
+  ]
+}

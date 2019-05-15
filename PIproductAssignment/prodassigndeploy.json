@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apiServiceName": {
+      "type": "string",
+      "minLength": 10,
+      "metadata": {
+        "description": "The name of API service to associate this APIs with"
+      }
+    },
+    "apiName": {
+      "type": "string",
+      "minLength": 3,
+      "metadata": {
+        "description": "API name"
+      }
+    },
+    "productName": {
+      "type": "string",
+      "minLength": 3,
+      "metadata": {
+        "description": "Name of the API product"
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "comments": "Registering product with the API",
+      "type": "Microsoft.ApiManagement/service/products/apis",
+      "name": "[concat(parameters('apiServiceName'), '/', parameters('productName'), '/', parameters('apiName'))]",
+      "apiVersion": "2018-06-01-preview"
+    }
+  ]
+}

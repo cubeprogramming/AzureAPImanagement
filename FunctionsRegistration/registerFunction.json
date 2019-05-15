@@ -1,0 +1,89 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apiServiceName": {
+      "type": "string",
+      "minLength": 10,
+      "metadata": {
+        "description": "The name of API service to associate this APIs with"
+      }
+    },
+    "functionName": {
+      "type": "string",
+      "minLength": 3,
+      "metadata": {
+        "description": "API name"
+      }
+    },
+    "functionDescription": {
+      "type": "string",
+      "defaultValue": "[parameters('functionName')]",
+      "minLength": 3,
+      "metadata": {
+        "description": "API name"
+      }
+    },
+    "functionKeyName": {
+      "type": "string",
+      "defaultValue": "function-key"
+    },
+    "functionKeyValue": {
+      "type": "string",
+      "defaultValue": "Qh8cP201c7wUlSRba9k4dNTVxHOo2qqV6y45WJ0I6k4tOquR81DaYg=="
+    },
+    "subscriptionId": {
+      "type": "string",
+      "defaultValue": "[subscription().id]"
+    }
+
+  },
+  "variables": {
+    "functionKeyResourceName": "[concat(parameters('apiServiceName'), '/', parameters('functionKeyName'))]",
+    "functionResourceName": "[concat(parameters('apiServiceName'), '/', parameters('functionName'))]"
+  },
+  "resources": [
+    {
+      "comments": "Named Values: Function key",
+      "type": "Microsoft.ApiManagement/service/properties",
+      "name": "[variables('functionKeyResourceName')]",
+      "apiVersion": "2018-06-01-preview",
+      "scale": null,
+      "properties": {
+        "displayName": "[parameters('functionKeyName')]",
+        "value": "[parameters('functionKeyValue')]",
+        "tags": [
+          "key",
+          "function",
+          "auto"
+        ],
+        "secret": true
+      },
+      "dependsOn": []
+    },
+    {
+      "comments": "Function Backend registration",
+      "type": "Microsoft.ApiManagement/service/backends",
+      "name": "[variables('functionResourceName')]",
+      "apiVersion": "2018-06-01-preview",
+      "scale": null,
+      "properties": {
+        "title": "[parameters('functionName')]",
+        "description": "[parameters('functionDescription')]",
+        "url": "[concat('https://', parameters('functionName'),'.azurewebsites.net/api')]",
+        "protocol": "http",
+        "resourceId": "[concat('https://management.azure.com',parameters('subscriptionId'),'/resourceGroups/AzureFunctions/providers/Microsoft.Web/sites/', parameters('functionName'))]",
+        "credentials": {
+          "query": {
+            "code": [
+              "[concat('{{',parameters('functionKeyName'),'}}')]"
+            ]
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/properties', parameters('apiServiceName'), parameters('functionKeyName'))]"
+      ]
+    }
+  ]
+}

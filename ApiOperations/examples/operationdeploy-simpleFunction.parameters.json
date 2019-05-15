@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apiServiceName": {
+      "value": "apiServiceName-dev"
+    },
+    "apiName": {
+      "value": "cubemyfirstfunction"
+    },
+    "operationName": {
+      "value": "simpleFunction"
+    },
+    "operationDisplayName": {
+      "value": "simpleFunction"
+    },
+    "operationDescription": {
+      "value": "Simple Function operation"
+    },
+    "httpMethod": {
+      "value": "GET"
+    },
+    "urlSufix": {
+      "value": "/simpleFunction"
+    },
+    "policyFile": {
+      "value": "<policies><inbound><base /><set-backend-service id='apim-generated-policy' backend-id='FunctionName' /></inbound><backend><base /></backend><outbound><base /></outbound><on-error><base /></on-error></policies>"
+    }
+  }
+}

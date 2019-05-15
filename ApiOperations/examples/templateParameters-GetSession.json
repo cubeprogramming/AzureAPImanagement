@@ -1,0 +1,9 @@
+﻿[
+  {
+    "name": "id",
+    "description": "Format - int32.",
+    "type": "integer",
+    "required": true,
+    "values": []
+  }
+]

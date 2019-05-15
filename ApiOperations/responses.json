@@ -1,0 +1,12 @@
+﻿[
+  {
+    "statusCode": 200,
+    "description": "OK",
+    "representations": [
+      {
+        "contentType": "application/vnd.collection+json"
+      }
+    ],
+    "headers": []
+  }
+]

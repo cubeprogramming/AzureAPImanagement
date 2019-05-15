@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apiServiceName": {
+      "value": "apiServiceName-dev"
+    },
+    "policyFile": {
+      "value": "\u003cpolicies\u003e\\r\\n  \u003cinbound /\u003e\\r\\n  \u003cbackend\u003e\\r\\n    \u003cforward-request /\u003e\\r\\n  \u003c/backend\u003e\\r\\n  \u003coutbound /\u003e\\r\\n\u003c/policies\u003e"
+    }
+  }
+}

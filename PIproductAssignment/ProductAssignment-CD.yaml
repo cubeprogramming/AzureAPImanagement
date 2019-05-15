@@ -1,0 +1,9 @@
+steps:
+- task: AzureResourceGroupDeployment@2
+  displayName: 'Azure Deployment: Deploy API '
+  inputs:
+    azureSubscription: 'Dev (f4a1ab46-ecfe-4834-b0f3-835c8d14e8bb)'
+    resourceGroupName: 'API_Management'
+    location: 'West Europe'
+    csmFile: '$(System.DefaultWorkingDirectory)/_AzureAPIproductAssignment-CI/apiproducts/prodassigndeploy.json'
+    csmParametersFile: '$(System.DefaultWorkingDirectory)/_AzureAPIproductAssignment-CI/apiproducts/prodassigndeploy.parameters.json'

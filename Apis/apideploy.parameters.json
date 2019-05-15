@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apiServiceName": {
+      "value": "apiServiceName-dev"
+    },
+    "apiName": {
+      "value": "demo-conference-api"
+    },
+    "apiDisplayName": {
+      "value": "Demo Conference API"
+    },
+    "apiDescription": {
+      "value": "A sample API with information related to a technical conference.  The available resources  include *Speakers*, *Sessions* and *Topics*.  A single write operation is available to provide  feedback on a session."
+    },
+    "serviceUrl": {
+      "value": "https://conferenceapi.azurewebsites.net"
+    }
+  }
+}

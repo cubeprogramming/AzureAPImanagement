@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apiServiceName": {
+      "type": "string",
+      "minLength": 10,
+      "metadata": {
+        "description": "The name of API service to associate this APIs with"
+      }
+    },
+    "policyName": {
+      "type": "string",
+      "defaultValue": "policy",
+      "minLength": 3,
+      "metadata": {
+        "description": "Name of default policy for all operations"
+      }
+    },
+    "policyFile": {
+      "type": "string",
+      "defaultValue": "<!--\r\n    IMPORTANT:\r\n    - Policy elements can appear only within the <inbound>, <outbound>, <backend> section elements.\r\n    - Only the <forward-request> policy element can appear within the <backend> section element.\r\n    - To apply a policy to the incoming request (before it is forwarded to the backend service), place a corresponding policy element within the <inbound> section element.\r\n    - To apply a policy to the outgoing response (before it is sent back to the caller), place a corresponding policy element within the <outbound> section element.\r\n    - To add a policy position the cursor at the desired insertion point and click on the round button associated with the policy.\r\n    - To remove a policy, delete the corresponding policy statement from the policy document.\r\n    - Policies are applied in the order of their appearance, from the top down.\r\n-->\r\n<policies>\r\n  <inbound />\r\n  <backend>\r\n    <forward-request />\r\n  </backend>\r\n  <outbound />\r\n</policies>",
+      "minLength": 3,
+      "metadata": {
+        "description": "XML file containing policy informations"
+      }
+    }
+    
+  },
+  "variables": {},
+  "resources": [
+    {
+      "comments": "Default policy for all operations: Generalized from resource: '/subscriptions/f5e23635-afde-4f54-acd2-a4af1cf99523/resourcegroups/API_Management/providers/Microsoft.ApiManagement/service/cubeapimgr/policies/policy'.",
+      "type": "Microsoft.ApiManagement/service/policies",
+      "name": "[concat(parameters('apiServiceName'), '/', parameters('policyName'))]",
+      "apiVersion": "2018-06-01-preview",
+      "scale": null,
+      "properties": {
+        "policyContent": "[parameters('policyFile')]",
+        "contentFormat": "xml"
+      },
+      "dependsOn": []
+    }
+  ]
+}

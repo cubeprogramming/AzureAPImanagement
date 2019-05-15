@@ -1,0 +1,132 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apiServiceName": {
+      "type": "string",
+      "minLength": 10,
+      "metadata": {
+        "description": "The name of API service to associate this APIs with"
+      }
+    },
+    "apiName": {
+      "type": "string",
+      "minLength": 3,
+      "metadata": {
+        "description": "API name"
+      }
+    },
+    "operationName": {
+      "type": "string",
+      "defaultValue": "GetSomething",
+      "minLength": 3,
+      "metadata": {
+        "description": "Operation name for given API"
+      }
+    },
+    "operationDisplayName": {
+      "type": "string",
+      "defaultValue": "[parameters('operationName')]",
+      "minLength": 3,
+      "metadata": {
+        "description": "The name of API"
+      }
+    },
+    "operationDescription": {
+      "type": "string",
+      "defaultValue": "Individual API containing operations",
+      "minLength": 10,
+      "metadata": {
+        "description": "The name of API"
+      }
+    },
+    "httpMethod": {
+      "type": "string",
+      "defaultValue": "GET",
+      "minLength": 3,
+      "metadata": {
+        "description": "http method"
+      }
+    },
+    "urlSufix": {
+      "type": "string",
+      "defaultValue": "/sessions",
+      "minLength": 1,
+      "metadata": {
+        "description": "URL sufix appended to main API URL"
+      }
+    },
+    "templateParameters": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "Optional template parameters if sending parameters in URL request e.g. /session/{id}"
+      }
+    },
+    "request": {
+      "type": "object",
+      "defaultValue": {
+
+        "headers": [],
+        "representations": []
+      },
+      "metadata": {
+        "description": "Optioanl JSON structure containing request informations"
+      }
+    },
+    "responses": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "Optional JSON structure containing response information"
+      }
+    },
+    "policyFile": {
+      "type": "string",
+      "defaultValue": "<policies><inbound><base /></inbound><backend><base /></backend><outbound><base /></outbound><on-error><base /></on-error></policies>",
+      "minLength": 3,
+      "metadata": {
+        "description": "XML file containing policy informations"
+      }
+    }
+
+  },
+  "variables": {
+    "policyName": "policy",
+    "policyContent": "[replace(parameters('policyFile'),'FunctionName', parameters('apiName'))]"
+  },
+  "resources": [
+    {
+      "comments": "Generic resource definition for API operatins",
+      "type": "Microsoft.ApiManagement/service/apis/operations",
+      "name": "[concat(parameters('apiServiceName'), '/', parameters('apiName'), '/', parameters('operationName'))]",
+      "apiVersion": "2018-06-01-preview",
+      "scale": null,
+      "properties": {
+        "displayName": "[parameters('operationDisplayName')]",
+        "method": "[parameters('httpMethod')]",
+        "urlTemplate": "[parameters('urlSufix')]",
+        "templateParameters": "[parameters('templateParameters')]",
+        "description": "[parameters('operationDescription')]",
+        "request": "[parameters('request')]",
+        "responses": "[parameters('responses')]",
+        "policies": null
+      },
+      "dependsOn": []
+    },
+    {
+      "comments": "API operation policy registration.",
+      "type": "Microsoft.ApiManagement/service/apis/operations/policies",
+      "name": "[concat(parameters('apiServiceName'), '/', parameters('apiName'), '/', parameters('operationName'), '/', variables('policyName'))]",
+      "apiVersion": "2018-06-01-preview",
+      "scale": null,
+      "properties": {
+        "policyContent": "[variables('policyContent')]",
+        "contentFormat": "xml"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/apis/operations', parameters('apiServiceName'), parameters('apiName'), parameters('operationName'))]"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "apiServiceName": {
+      "type": "string",
+      "minLength": 10,
+      "metadata": {
+        "description": "The name of API service to associate this APIs with"
+      }
+    },
+    "productName": {
+      "type": "string",
+      "minLength": 3,
+      "metadata": {
+        "description": "Name of the API product"
+      }
+    },
+    "productDisplayName": {
+      "defaultValue": "[parameters('productName')]",
+      "type": "string"
+    },
+    "productDescription": {
+      "defaultValue": "Subscribers will be able to run 5 calls/minute up to a maximum of 100 calls/week.",
+      "type": "string"
+    },
+    "policyName": {
+      "type": "string",
+      "defaultValue": "policy",
+      "minLength": 3,
+      "metadata": {
+        "description": "Name of default policy for all operations"
+      }
+    },
+    "policyFile": {
+      "type": "string",
+      "defaultValue": "<policies><inbound><base /></inbound><backend><base /></backend><outbound><base /></outbound><on-error><base /></on-error></policies>",
+      "minLength": 3,
+      "metadata": {
+        "description": "XML file containing policy informations"
+      }
+    }
+
+  },
+  "variables": {},
+  "resources": [
+    {
+      "comments": "Product registration template",
+      "type": "Microsoft.ApiManagement/service/products",
+      "name": "[concat(parameters('apiServiceName'), '/', parameters('productName'))]",
+      "apiVersion": "2018-06-01-preview",
+      "scale": null,
+      "properties": {
+        "displayName": "[parameters('productDisplayName')]",
+        "description": "[parameters('productDescription')]",
+        "terms": "",
+        "subscriptionRequired": true,
+        "approvalRequired": false,
+        "subscriptionsLimit": 1,
+        "state": "published"
+      },
+      "dependsOn": []
+    },
+
+    {
+      "comments": "Policy for generated product",
+      "type": "Microsoft.ApiManagement/service/products/policies",
+      "name": "[concat(parameters('apiServiceName'), '/', parameters('productName'), '/', parameters('policyName'))]",
+      "apiVersion": "2018-06-01-preview",
+      "scale": null,
+      "properties": {
+        "policyContent": "[parameters('policyFile')]",
+        "contentFormat": "xml"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.ApiManagement/service/products', parameters('apiServiceName'), parameters('productName'))]"
+      ]
+    }
+  ]
+}

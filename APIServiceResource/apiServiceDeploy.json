@@ -1,0 +1,116 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "publisherEmail": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "The email address of the owner of the service"
+      }
+    },
+    "publisherName": {
+      "type": "string",
+      "minLength": 1,
+      "metadata": {
+        "description": "The name of the owner of the service"
+      }
+    },
+    "department": {
+      "type": "string",
+      "defaultValue": "development",
+      "metadata": {
+        "description": "Name of department/team that owns, created and maintains the resource."
+      }
+    },
+    "environment": {
+      "type": "string",
+      "defaultValue": "dev",
+      "allowedValues": [
+        "dev",
+        "test",
+        "qa",
+        "prod"
+      ],
+      "metadata": {
+        "description": "The environment that this resource belongs to."
+      }
+    },
+    "version": {
+      "type": "string",
+      "defaultValue": "-",
+      "metadata": {
+        "description": "Add the version-number of the resource/service, if you need more than one version of the resource."
+      }
+    },
+    "sku": {
+      "type": "string",
+      "allowedValues": [
+        "Developer",
+        "Standard",
+        "Premium"
+      ],
+      "defaultValue": "Developer",
+      "metadata": {
+        "description": "The pricing tier of this API Management service."
+      }
+    },
+    "instanceCount": {
+      "type": "int",
+      "defaultValue": 1,
+      "metadata": {
+        "description": "The instance size of this API Management service."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    }
+  },
+  "variables": {
+    "apiManagementcomponentString": "[concat(parameters('department'),'-',parameters('environment'),if(equals(parameters('version'),'-'), '',concat('-',parameters('version'))) )]",
+
+    "apiManagementcomponent": "[if(greater(length(variables('apiManagementcomponentString')), 80), substring(variables('apiManagementcomponentString'),0,79),variables('apiManagementcomponentString'))]"
+  },
+  "resources": [
+    {
+      "comments": "API Service resurce that is used as a container for APIs",
+      "type": "Microsoft.ApiManagement/service",
+      "sku": {
+        "name": "[parameters('sku')]",
+        "capacity": "[parameters('instanceCount')]"
+      },
+      "name": "[variables('apiManagementcomponent')]",
+      "apiVersion": "2018-06-01-preview",
+      "location": "[parameters('location')]",
+      "tags": {},
+      "scale": null,
+      "properties": {
+        "publisherEmail": "[parameters('publisherEmail')]",
+        "publisherName": "[parameters('publisherName')]",
+        "notificationSenderEmail": "apimgmt-noreply@mail.windowsazure.com",
+        "hostnameConfigurations": [],
+        "additionalLocations": null,
+        "virtualNetworkConfiguration": null,
+        "customProperties": {
+          "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls10": "False",
+          "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls11": "False",
+          "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Ssl30": "False",
+          "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TripleDes168": "False",
+          "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls10": "False",
+          "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls11": "False",
+          "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Ssl30": "False"
+        },
+        "virtualNetworkType": "None",
+        "certificates": null
+      },
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "dependsOn": []
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+﻿[
+  {
+    "statusCode": 200,
+    "description": "OK",
+    "representations": [
+      {
+        "contentType": "application/hal+json"
+      },
+      {
+        "contentType": "text/plain"
+      }
+    ],
+    "headers": []
+  }
+]
